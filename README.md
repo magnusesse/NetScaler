@@ -1,2 +1,2 @@
 # NetScaler
-Variuos NetScaler related scripts
+Variuos NetScaler related tools and good to have things gathered over time.
