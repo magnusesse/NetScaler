@@ -11,3 +11,4 @@ Access to CLI and shell on the NetScaler where the script should be run.
 Copy/paste all lines to CLI after logging in
 Use scp to copy the output files to local drive if required to be stored
 Investigate the content of the generated files to see the results
+ All files will be placed in /tmp/status/ directory

@@ -41,9 +41,10 @@ echo 'echo "Number of content swith virtual servers configured" >> /tmp/status/s
 echo "wc -l /tmp/status/csvs.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/status/summary.status" >> /tmp/status/check_status.sh
 echo 'echo "Number of content switch virtual servers in DOWN state" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
 echo 'grep "DOWN" /tmp/status/csvs.status | wc -l >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
-echo 'nsconmsg -K /var/nslog/newnslog -d event | grep -i "DOWN;" >> /tmp/status/failed_monitors.status' >> /tmp/status/check_status.sh
+echo 'nsconmsg -K /var/nslog/newnslog -d event | grep -i "DOWN;" > /tmp/status/failed_monitors.status' >> /tmp/status/check_status.sh
 chmod +x /tmp/status/check_status.sh
 /tmp/status/check_status.sh
+exit
 #
 # Copy the following files off the NetScaler for future reference
 #
@@ -56,3 +57,6 @@ chmod +x /tmp/status/check_status.sh
 # /tmp/status/lbvs.status
 # /tmp/status/csvs.status
 # /tmp/status/summary.status
+# /tmp/status/failed_monitors.status
+#
+# To clean up remove the /tmp/status/ directory
