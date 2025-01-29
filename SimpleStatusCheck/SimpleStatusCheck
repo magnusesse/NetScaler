@@ -3,54 +3,56 @@
 # log into NetScaler and run the following commands:
 #
 shell
-echo "sh cs vserver" > /tmp/csvs.in
-echo "sh lb vserver" > /tmp/lbvs.in
-echo "sh service" > /tmp/svc.in
-echo "show servicegroup" > /tmp/svcg.in
+mkdir /tmp/status
+echo "sh cs vserver" > /tmp/status/csvs.in
+echo "sh lb vserver" > /tmp/status/lbvs.in
+echo "sh service" > /tmp/status/svc.in
+echo "show servicegroup" > /tmp/status/svcg.in
 exit
 #
 # Run the following batch commands
 #
-batch -fileName /tmp/svc.in -outfile /tmp/svc.out
-batch -fileName /tmp/svcg.in -outfile /tmp/svcg.out
-batch -fileName /tmp/lbvs.in -outfile /tmp/lbvs.out
-batch -fileName /tmp/csvs.in -outfile /tmp/csvs.out
+batch -fileName /tmp/status/svc.in -outfile /tmp/status/svc.out
+batch -fileName /tmp/status/svcg.in -outfile /tmp/status/svcg.out
+batch -fileName /tmp/status/lbvs.in -outfile /tmp/status/lbvs.out
+batch -fileName /tmp/status/csvs.in -outfile /tmp/status/csvs.out
 #
 # run the following shell commands
 #
 shell
-echo '##/bin/sh' > /tmp/check_status.sh
-echo "grep -A1 '^[0-9]*)' /tmp/svc.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/svc.status" >> /tmp/check_status.sh
-echo "grep -A1 '^[0-9]*)' /tmp/svcg.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/svcg.status" >> /tmp/check_status.sh
-echo "grep -A1 '^[0-9]*)' /tmp/lbvs.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/lbvs.status" >> /tmp/check_status.sh
-echo "grep -A1 '^[0-9]*)' /tmp/csvs.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/csvs.status" >> /tmp/check_status.sh
-echo 'echo "Number of services configured" > /tmp/summary.status' >> /tmp/check_status.sh
-echo "wc -l /tmp/svc.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/summary.status" >> /tmp/check_status.sh
-echo 'echo "Number of services in DOWN state" >> /tmp/summary.status' >> /tmp/check_status.sh
-echo 'grep "DOWN" /tmp/svc.status | wc -l >> /tmp/summary.status' >> /tmp/check_status.sh
-echo 'echo "Number of servicegroups configured" >> /tmp/summary.status' >> /tmp/check_status.sh
-echo "wc -l /tmp/svcg.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/summary.status" >> /tmp/check_status.sh
-echo 'echo "Number of servicegroups in DOWN state" >> /tmp/summary.status' >> /tmp/check_status.sh
-echo 'grep "DOWN" /tmp/svcg.status | wc -l >> /tmp/summary.status' >> /tmp/check_status.sh
-echo 'echo "Number of load balancing virtual servers configured" >> /tmp/summary.status' >> /tmp/check_status.sh
-echo "wc -l /tmp/lbvs.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/summary.status" >> /tmp/check_status.sh
-echo 'echo "Number of load balancing virtual servers in DOWN state" >> /tmp/summary.status' >> /tmp/check_status.sh
-echo 'grep "DOWN" /tmp/lbvs.status | wc -l >> /tmp/summary.status' >> /tmp/check_status.sh
-echo 'echo "Number of content swith virtual servers configured" >> /tmp/summary.status' >> /tmp/check_status.sh
-echo "wc -l /tmp/csvs.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/summary.status" >> /tmp/check_status.sh
-echo 'echo "Number of content switch virtual servers in DOWN state" >> /tmp/summary.status' >> /tmp/check_status.sh
-echo 'grep "DOWN" /tmp/csvs.status | wc -l >> /tmp/summary.status' >> /tmp/check_status.sh
-chmod +x /tmp/check_status.sh
-/tmp/check_status.sh
+echo '##/bin/sh' > /tmp/status/check_status.sh
+echo "grep -A1 '^[0-9]*)' /tmp/status/svc.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/status/svc.status" >> /tmp/status/check_status.sh
+echo "grep -A1 '^[0-9]*)' /tmp/status/svcg.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/status/svcg.status" >> /tmp/status/check_status.sh
+echo "grep -A1 '^[0-9]*)' /tmp/status/lbvs.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/status/lbvs.status" >> /tmp/status/check_status.sh
+echo "grep -A1 '^[0-9]*)' /tmp/status/csvs.out | grep -v ^-- | sed -e 'N;s/\n/ /' > /tmp/status/csvs.status" >> /tmp/status/check_status.sh
+echo 'echo "Number of services configured" > /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo "wc -l /tmp/status/svc.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/status/summary.status" >> /tmp/status/check_status.sh
+echo 'echo "Number of services in DOWN state" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'grep "DOWN" /tmp/status/svc.status | wc -l >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'echo "Number of servicegroups configured" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo "wc -l /tmp/status/svcg.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/status/summary.status" >> /tmp/status/check_status.sh
+echo 'echo "Number of servicegroups in DOWN state" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'grep "DOWN" /tmp/status/svcg.status | wc -l >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'echo "Number of load balancing virtual servers configured" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo "wc -l /tmp/status/lbvs.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/status/summary.status" >> /tmp/status/check_status.sh
+echo 'echo "Number of load balancing virtual servers in DOWN state" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'grep "DOWN" /tmp/status/lbvs.status | wc -l >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'echo "Number of content swith virtual servers configured" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo "wc -l /tmp/status/csvs.status | sed -e 's# /.*##' | sed -e 's/^   //' >> /tmp/status/summary.status" >> /tmp/status/check_status.sh
+echo 'echo "Number of content switch virtual servers in DOWN state" >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'grep "DOWN" /tmp/status/csvs.status | wc -l >> /tmp/status/summary.status' >> /tmp/status/check_status.sh
+echo 'nsconmsg -K /var/nslog/newnslog -d event | grep -i "DOWN;" >> /tmp/status/failed_monitors.status' >> /tmp/status/check_status.sh
+chmod +x /tmp/status/check_status.sh
+/tmp/status/check_status.sh
 #
 # Copy the following files off the NetScaler for future reference
 #
-# /tmp/svc.out
-# /tmp/svcg.out
-# /tmp/lbvs.out
-# /tmp/csvs.out
-# /tmp/svc.status
-# /tmp/svcg.status
-# /tmp/lbvs.status
-# /tmp/csvs.status
-# /tmp/summary.status
+# /tmp/status/svc.out
+# /tmp/status/svcg.out
+# /tmp/status/lbvs.out
+# /tmp/status/csvs.out
+# /tmp/status/svc.status
+# /tmp/status/svcg.status
+# /tmp/status/lbvs.status
+# /tmp/status/csvs.status
+# /tmp/status/summary.status
